@@ -1,30 +1,27 @@
 ## Aust Post - Process single .lpf file
 
 library(dplyr)
-library(plotflow)
-# library(reports)
 
 ## Debug only
-t.dir <- "C:/Users/Rob/Desktop/Telstra Aust Post/Telstra Business Centre Wagga Wagga (Riverina)"
-t.inputDir <- "C:/Users/Rob/Desktop/Telstra Aust Post/Telstra Business Centre Wagga Wagga (Riverina)"
-t.outputDir <- "C/Users/Rob/Desktop/Aust Post Output/"
+t.dir <- "C:/Users/Rob/Desktop/Stores/dev/Telstra Aust Post/Telstra Business Centre Wagga Wagga (Riverina)"
+t.inputDir <- "C:/Users/Rob/Desktop/Stores/dev/Telstra Aust Post/Telstra Business Centre Wagga Wagga (Riverina)"
+t.outputDir <- "C/Users/Rob/Desktop/Stores/dev/Aust Post Output/"
 t.file <- "U0496219_TrayLabelLPF.lpf"
 ## End debug
 
 cat("\014")
 
-t.stocks <- c("Telstra")
+## Declarations
+# pdftk is an appplication with the ability to merge pdf files. It is accessed through system commands.
+t.pdftkApp <- "C:\\Users\\Rob\\Desktop\\Stores\\PDFTKBuilderPortable\\App\\pdftkbuilder\\pdftk.exe"
 
-# readline("Stock movement processing.\n\n1. Telstra")
-
-# Declarations
 t.maxLargeTrayWeight <- 16 * 1000
 t.maxSmallTrayWeight <- 8 * 1000
 
 # t.dir <- choose.dir(default = "C:/Users/Rob/Desktop/",
 #                                   caption = "Select Aust Post folder")
 
-t.path <- "C:/Users/Rob/Desktop/Telstra Aust Post"
+t.path <- "C:/Users/Rob/Desktop/Stores/dev/Telstra Aust Post"
 
 t.weight <- readline("Enter weight per catalogue (g): ")
 t.bundleSize <- readline("Enter bundle size: ")
@@ -32,7 +29,7 @@ t.bundleSize <- readline("Enter bundle size: ")
 t.maxTraySize <- 400
 
 t.dirs <- list.dirs(path=t.path, recursive = FALSE)
-t.outputDir <- "C:\\Users\\Rob\\Desktop\\Telstra Output Files"
+t.outputDir <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\Telstra Output Files"
 
 ## Process file
 t.processfile <- function(t.inputDir, outputDir, t.file) {
@@ -140,8 +137,8 @@ t.processPdfFile <- function() {
     pdfOutputFiles <- NULL
 
     sapply(t.dirs, function(t.dir) {
-        bookingConfirmationFiles <- list.files(path = t.dir, recursive = FALSE, pattern = "*BookingConfirmationAdvice.pdf", full.names = FALSE)
-        mailingStatementFiles <- list.files(path = t.dir, recursive = FALSE, pattern = "*MailingStatement.pdf", full.names = FALSE)
+        bookingConfirmationFiles <- list.files(path = t.dir, recursive = FALSE, pattern = "*BookingConfirmationAdvice.pdf", full.names = TRUE)
+        mailingStatementFiles <- list.files(path = t.dir, recursive = FALSE, pattern = "*MailingStatement.pdf", full.names = TRUE)
 
         ## File validation
         if (length(bookingConfirmationFiles) == 0) {
@@ -171,10 +168,19 @@ t.processPdfFile <- function() {
     pdfOutputFiles
 }
 
-cat("\nGenerating pdf file...")
+cat("\nGenerating pdf file...\n")
 t.pdfOutputFiles <- NULL
-t.pdfOutputFiles <- complete.cases(t.processPdfFile())
-plotflow::mergePDF(in.file = paste(pdfFiles, collapse=" "), file="merged.pdf")
+t.pdfOutputFiles <- t.processPdfFile() %>% na.omit()
+t.pdfOutputFiles <- paste0("\"", t.pdfOutputFiles, "\"")
+t.pdfOutputFile <- paste0("\"", t.outputDir, "\\", Sys.Date(), " Telstra Aust Post.pdf", "\"")
+
+t.mergeCommand <- paste(t.pdftkApp,
+             paste(t.pdfOutputFiles, collapse = " "),
+             "cat output",
+             t.pdfOutputFile)
+
+t.result <- system(t.mergeCommand, intern = TRUE)
+cat(paste0("\nResult:\n", t.result))
 
 ## File and directory exploration
 sapply(t.dirs, function(t.dir) {
