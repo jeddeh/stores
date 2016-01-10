@@ -6,6 +6,10 @@ Unaddressed Mail_U0496214,Salmat (NSW),0287632128,NSW,U0496214,1
 
 #Label Details
 #Service,Sort_Plan_Type,Sort_Plan,Destination_Ind,Mail_Size,Label_Qty,Date,Additional_Text
-U,3,2015,2,L,2,18-JAN-16,T1/2 A509
-U,3,2018,1,L,2,18-JAN-16,T2/2 A39
+U,3,2015,2,L,2,18-JAN-16,T1/6 A120
+U,3,2015,2,L,2,18-JAN-16,T2/6 A120
+U,3,2015,2,L,2,18-JAN-16,T3/6 A120
+U,3,2015,2,L,2,18-JAN-16,T4/6 A120
+U,3,2018,1,L,2,18-JAN-16,T5/6 A39
+U,3,2015,2,L,2,18-JAN-16,T6/6 A29
 #End Of File

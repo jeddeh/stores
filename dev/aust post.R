@@ -17,10 +17,11 @@ cat("This application processes bulk Telstra Aust Post bookings.\n\n")
 
 cat("Select input folder\n\n")
 
-t.path <- choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/Telstra Aust Post/",
+t.inputDir <- choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/Telstra Aust Post/",
                      caption = "Select Aust Post folder")
 
-t.dirs <- list.dirs(path=t.path, recursive = FALSE)
+t.dirs <- list.dirs(path=t.inputDir, recursive = FALSE, full.names = FALSE)
+t.bookings <- data.frame(Region = t.dirs)
 
 cat("Select output folder\n\n")
 
@@ -135,12 +136,14 @@ t.processPdfFile <- function() {
     pdfOutputFiles <- NULL
 
     sapply(t.dirs, function(t.dir) {
-        bookingConfirmationFiles <- list.files(path = t.dir,
+        t.dirPath <- file.path(t.inputDir, t.dir)
+
+        bookingConfirmationFiles <- list.files(path = t.dirPath,
                                                recursive = FALSE,
                                                pattern = "*BookingConfirmationAdvice.pdf",
                                                full.names = TRUE)
 
-        mailingStatementFiles <- list.files(path = t.dir,
+        mailingStatementFiles <- list.files(path = t.dirPath,
                                             recursive = FALSE,
                                             pattern = "*MailingStatement.pdf",
                                             full.names = TRUE)
@@ -215,11 +218,12 @@ if (length(t.result) != 0) {
 
 cat("\n")
 
-## File and directory exploration
+## Processing tray files
 cat("Processing tray label files...\n")
 
 sapply(t.dirs, function(t.dir) {
-    trayLabelFiles <- list.files(path = t.dir, recursive = FALSE, pattern = "*TrayLabelLPF.lpf", full.names = FALSE)
+    t.dirPath <- file.path(t.inputDir, t.dir)
+    trayLabelFiles <- list.files(path = t.dirPath, recursive = FALSE, pattern = "*TrayLabelLPF.lpf", full.names = FALSE)
 
     if (length(trayLabelFiles) == 0) {
         cat(paste0("\n** WARNING: There is no tray label file in directory ", t.dir))
@@ -234,7 +238,7 @@ sapply(t.dirs, function(t.dir) {
         return()
     }
 
-    t.processTrayLabelFile(t.dir, outputDir, trayLabelFiles[1])
+    t.processTrayLabelFile(t.dirPath, outputDir, trayLabelFiles[1])
 })
 
 ## Booking list file
@@ -247,4 +251,4 @@ if (file.exists(t.bookingFile)) {
     file.remove(t.bookingFile)
 }
 
-writeLines(t.dirs, con = t.bookingFile)
+writeLines(paste0(t.bookings$Region), con = t.bookingFile)

@@ -1,41 +1,41 @@
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Armidale
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Broadway
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/East Maitland
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Glendale
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Merrylands (West Sydney)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/North Sydney
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Parkes
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Queanbeyan
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Rhodes
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Salamander Bay
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Albury Wodonga
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Bella Vista (Hills & NW)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Canberra
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Central Coast
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Central West
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Coffs Harbour (Coast)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Drummoyne (Inner West)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Frenches Forest (Nth Beaches)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Fyshwick
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Homebush
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Hunter Nsw
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Lismore (Nth Coast)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Liverpool
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Merrylands (W Sydney)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Miranda (Sth Subrbs)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Mittagong
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Newcastle
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre North Ryde
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Nowra
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Penrith (Nepean)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Port Macquarie
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Rosebery
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre St Leonards
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Sydney City South
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Tamworth (Northwest)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Wagga Wagga (Riverina)
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Telstra Business Centre Wollongong
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Tweed Heads Centro
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Warriewood
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Wetherill Park
-C:\Users\Rob\Desktop\Stores\dev\Telstra Aust Post/Young
+Armidale
+Broadway
+East Maitland
+Glendale
+Merrylands (West Sydney)
+North Sydney
+Parkes
+Queanbeyan
+Rhodes
+Salamander Bay
+Telstra Business Centre Albury Wodonga
+Telstra Business Centre Bella Vista (Hills & NW)
+Telstra Business Centre Canberra
+Telstra Business Centre Central Coast
+Telstra Business Centre Central West
+Telstra Business Centre Coffs Harbour (Coast)
+Telstra Business Centre Drummoyne (Inner West)
+Telstra Business Centre Frenches Forest (Nth Beaches)
+Telstra Business Centre Fyshwick
+Telstra Business Centre Homebush
+Telstra Business Centre Hunter Nsw
+Telstra Business Centre Lismore (Nth Coast)
+Telstra Business Centre Liverpool
+Telstra Business Centre Merrylands (W Sydney)
+Telstra Business Centre Miranda (Sth Subrbs)
+Telstra Business Centre Mittagong
+Telstra Business Centre Newcastle
+Telstra Business Centre North Ryde
+Telstra Business Centre Nowra
+Telstra Business Centre Penrith (Nepean)
+Telstra Business Centre Port Macquarie
+Telstra Business Centre Rosebery
+Telstra Business Centre St Leonards
+Telstra Business Centre Sydney City South
+Telstra Business Centre Tamworth (Northwest)
+Telstra Business Centre Wagga Wagga (Riverina)
+Telstra Business Centre Wollongong
+Tweed Heads Centro
+Warriewood
+Wetherill Park
+Young
