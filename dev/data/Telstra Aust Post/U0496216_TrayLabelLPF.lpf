@@ -1,0 +1,17 @@
+3v1-850
+#Label Plan File
+
+#Label Plan Header
+Unaddressed Mail_U0496216,Salmat (NSW),0287632128,NSW,U0496216,1
+
+#Label Details
+#Service,Sort_Plan_Type,Sort_Plan,Destination_Ind,Mail_Size,Label_Qty,Date,Additional_Text
+U 3 2010 1 L 2 18-JAN-16 T1/8 A160
+U 3 2015 2 L 2 18-JAN-16 T2/8 A400
+U 3 2015 2 L 2 18-JAN-16 T3/8 A400
+U 3 2015 2 L 2 18-JAN-16 T4/8 A400
+U 3 2015 2 L 2 18-JAN-16 T5/8 A400
+U 3 2015 2 L 2 18-JAN-16 T6/8 A400
+U 3 2015 2 L 2 18-JAN-16 T7/8 A400
+U 3 2015 2 L 2 18-JAN-16 T8/8 A32
+#End Of File

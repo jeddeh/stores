@@ -2,31 +2,75 @@
 
 library(dplyr)
 library(magrittr)
+library(knitr)
+
+# script.dir <- "C:/Users/Rob/Desktop/Stores/dev/"
+# script.dir <- dirname(sys.frame(1)$ofile)
+# setwd(script.dir)
 
 rm(list = ls())
 
+# PC: '0' - Violet's PC, '1' - Receiving PC, '2' - Home PC
+t.pc <- '2'
+
+t.wd <- switch(t.pc,
+    '0' = ,
+    '1' = ,
+    '2' = "C:/Users/Rob/Desktop/Stores/dev/"
+    )
+
+setwd(t.wd)
+source("ap_processTrayLabelFile.R")
+source("ap_processPdfFile.R")
+
 ## Declarations
+
 # pdftk is an appplication with the ability to merge pdf files. It is accessed through system commands.
-t.pdftkApp <- "C:\\Users\\Rob\\Desktop\\Stores\\PDFTKBuilderPortable\\App\\pdftkbuilder\\pdftk.exe"
+t.pdftkApp <- switch (t.pc,
+    '0' = "T:\\Warehouse\\PDFTKBuilderPortable\\App\\pdftkbuilder\\pdftk.exe",
+    '1' = "T:\\Warehouse\\PDFTKBuilderPortable\\App\\pdftkbuilder\\pdftk.exe",
+    '2' = "C:\\Users\\Rob\\Desktop\\Stores\\PDFTKBuilderPortable\\App\\pdftkbuilder\\pdftk.exe"
+)
 
-t.tray <- data.frame(type = c("Large", "Small"), maxweight = c(16 * 1000, NULL))
+# wkhtmltopdf is an application used to convert html to pdf files. It is accessed through system commands.
+# ULD files are used to generate ULD tags.
+t.uldRmdFile <- switch(t.pc,
+    '0' = ,
+    '1' = ,
+    '2' = "C:\\Users\\Rob\\Desktop\\Stores\\dev\\uld files\\uld.Rmd"
+)
 
-## User variables
+t.uldCssFile <- switch(t.pc,
+   '0' = ,
+   '1' = ,
+   '2' = "C:\\Users\\Rob\\Desktop\\Stores\\dev\\uld files\\uld.css"
+)
+
+t.tray <- data.frame(type = c("Large", "Small"), maxweight = c(16 * 1000, 8 * 1000))
+t.brickStack <- FALSE
+
+## User prompts
 cat("\014")
 cat("This application processes bulk Telstra Aust Post bookings.\n\n")
 
 cat("Select input folder\n\n")
 
-t.inputDir <- choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/Telstra Aust Post/",
-                     caption = "Select Aust Post folder")
+t.inputDir <- switch (t.pc,
+    '0' = choose.dir(default = "C:/Users/saadv/Desktop/", caption = "Select Aust Post folder"),
+    '1' = choose.dir(default = "T:/Warehouse/Store Copies/Rob/dev/", caption = "Select Aust Post folder"),
+    '2' = choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/data/Telstra Aust Post/", caption = "Select Aust Post folder")
+)
 
 t.dirs <- list.dirs(path=t.inputDir, recursive = FALSE, full.names = FALSE)
-t.bookings <- data.frame(Region = t.dirs)
+t.bookings <- data.frame(Region = t.dirs, Booking = "", Items = 0, Bundles = 0, Trays = 0, Brick = 0, stringsAsFactors = FALSE)
 
 cat("Select output folder\n\n")
 
-t.outputDir <-  choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/Telstra Output Files/",
-                           caption = "Select output folder")
+t.outputDir <- switch(t.pc,
+    '0' = choose.dir(default = "C:/Users/saadv/Desktop/", caption = "Select output folder"),
+    '1' = choose.dir(default = "T:/Warehouse/Store Copies/Rob/dev/", caption = "Select output folder"),
+    '2' = choose.dir(default = "C:/Users/Desktop/Stores/dev/data/Telstra Output Files/", caption = "Select output folder")
+)
 
 t.check <- FALSE
 while(t.check == FALSE) {
@@ -64,161 +108,7 @@ while(t.check == FALSE) {
 t.maxBundlesPerTray <- maxBundles
 t.maxTraySize <- t.maxBundlesPerTray * t.bundleSize
 
-## Process tray label file
-t.processTrayLabelFile <- function(t.inputDir, outputDir, t.file) {
-    # Read file
-    t.data <- readLines(paste0(t.inputDir, "\\", t.file), warn = FALSE)
-    t.start <- match("#Label Details", t.data)
-    t.end <- match("#End Of File", t.data)
-    t.headers <- strsplit(gsub("#", "", t.data[t.start + 1]), ",")[[1]]
-
-    t.frame <- read.table(text = t.data,
-                          header = FALSE,
-                          sep = ",",
-                          skip = t.start,
-                          stringsAsFactors = FALSE,
-                          col.names = t.headers)
-
-    # Add columns to t.frame splitting Additional_Text column data
-
-    # Regex explanation
-    # ^ - starts with
-    # . - any character except new line
-    # *A - any one of more of previous expression ending in letter A
-    # ... then delete this part of the string
-    t.frame$Tray_Qty <- as.numeric(gsub("^.*A","", t.frame$Additional_Text))
-
-    t.combined <- aggregate(Tray_Qty ~ Service + Sort_Plan_Type + Sort_Plan + Destination_Ind + Mail_Size + Label_Qty + Date,
-                            data = t.frame, FUN = sum)
-
-    # Make t.newframe which will hold the final csv data
-    t.newframe <- data.frame(row.names = names(t.combined))
-
-    invisible(sapply(1:nrow(t.combined), function(i) {
-        quantity <- t.combined$Tray_Qty[i]
-        fullTrays <- floor(quantity / t.maxTraySize)
-        partialTrayQuantity <- quantity %% t.maxTraySize
-
-        fullTrayRow <- t.combined[i, ]
-        fullTrayRow$Tray_Qty <- t.maxTraySize
-
-        if (fullTrays > 0) {
-            sapply(1:fullTrays, function(n) {
-                t.newframe <<- rbind(t.newframe, fullTrayRow)
-            })
-        }
-
-        if (partialTrayQuantity > 0) {
-            partialRow <- t.combined[i, ]
-            partialRow$Tray_Qty <- partialTrayQuantity
-            t.newframe <<- rbind(t.newframe, partialRow)
-        }
-    }))
-
-    t.newframe <- arrange(t.newframe, desc(Tray_Qty), Sort_Plan)
-
-    invisible(sapply(1:nrow(t.newframe), FUN = function(n) {
-        t.newframe$Additional_Text[n] <<- paste0("T", n, "/", nrow(t.newframe), " A", t.newframe$Tray_Qty[n])
-    }))
-
-    t.newframe <- select(t.newframe, -Tray_Qty)
-
-    con <- textConnection("t.newcsv", "w")
-    write.table(t.newframe, con, quote = FALSE, row.names = FALSE, col.names = FALSE, sep = ",")
-    close(con)
-
-    t.newdata <- c(t.data[1:t.start + 1], t.newcsv, t.data[t.end])
-    writeLines(t.newdata, con = paste0(t.outputDir, "\\", t.file))
-}
-
-## Process PDF files
-t.processPdfFile <- function() {
-    pdfOutputFiles <- NULL
-
-    sapply(t.dirs, function(t.dir) {
-        t.dirPath <- file.path(t.inputDir, t.dir)
-
-        bookingConfirmationFiles <- list.files(path = t.dirPath,
-                                               recursive = FALSE,
-                                               pattern = "*BookingConfirmationAdvice.pdf",
-                                               full.names = TRUE)
-
-        mailingStatementFiles <- list.files(path = t.dirPath,
-                                            recursive = FALSE,
-                                            pattern = "*MailingStatement.pdf",
-                                            full.names = TRUE)
-
-        ## File validation
-        validBookingConfirmation <- TRUE
-        validMailingStatement <- TRUE
-
-        if (length(bookingConfirmationFiles) == 0) {
-            validBookingConfirmation <- FALSE
-            cat(paste0("** WARNING: There is no booking confirmation advice file in directory ", t.dir))
-            readline("Press <Enter> to Continue...")
-        }
-
-        if (length(bookingConfirmationFiles) > 1) {
-            validBookingConfirmation <- FALSE
-            cat(paste0("** WARNING: Multiple booking confirmation advice files exist in directory ", t.dir))
-            cat("No booking confirmation advice for this directory will be processed.")
-            readline("Press <Enter> to Continue...")
-        }
-
-        if (length(mailingStatementFiles) == 0) {
-            validMailingStatement = FALSE
-            cat(paste0("** WARNING: There is no mailing statement file in directory ", t.dir))
-            readline("Press <Enter> to Continue...")
-        }
-
-        if (length(mailingStatementFiles) > 1) {
-            validMailingStatement = FALSE
-            cat(paste0("** WARNING: Multiple mailing statement advice files exist in directory ", t.dir))
-            cat("No mailing statement for this directory will be printed.")
-            readline("Press <Enter> to Continue...")
-        }
-
-        if (validBookingConfirmation) {
-            pdfOutputFiles <<- c(pdfOutputFiles, bookingConfirmationFiles[1])
-        }
-
-        if (validMailingStatement) {
-            pdfOutputFiles <<- c(pdfOutputFiles, mailingStatementFiles[1])
-        }
-    })
-    pdfOutputFiles
-}
-
-cat("\nValidating pdf files...\n\n")
-t.pdfOutputFiles <- NULL
-t.pdfOutputFiles <- t.processPdfFile() %>% na.omit()
-
-cat("\nMerging pdf files...\n\n")
-t.pdfOutputFiles <- paste0("\"", t.pdfOutputFiles, "\"")
-t.pdfOutputFile <- paste0(t.outputDir, "\\", Sys.Date(), " Telstra Aust Post.pdf")
-
-if (file.exists(t.pdfOutputFile)) {
-    cat("** WARNING: Existing file will be overwritten.\n\n")
-    file.remove(t.pdfOutputFile)
-}
-
-t.pdfOutputFile <- paste0("\"", t.pdfOutputFile, "\"")
-
-t.mergeCommand <- paste(t.pdftkApp,
-             paste(t.pdfOutputFiles, collapse = " "),
-             "cat output",
-             t.pdfOutputFile)
-
-t.result <- system(t.mergeCommand, intern = TRUE)
-
-if (length(t.result) != 0) {
-    cat(paste(t.result, collapse = "\n"))
-    readline("Press <Enter> to Continue...")
-}
-
-cat("\n")
-
-## Processing tray files
+## Process tray files
 cat("Processing tray label files...\n")
 
 sapply(t.dirs, function(t.dir) {
@@ -238,17 +128,37 @@ sapply(t.dirs, function(t.dir) {
         return()
     }
 
-    t.processTrayLabelFile(t.dirPath, outputDir, trayLabelFiles[1])
+    t.processTrayLabelFile(t.dir, t.dirPath, t.outputDir, trayLabelFiles[1])
 })
+
+## Process PDF files
+cat("\nValidating pdf files...\n\n")
+t.processPdfFile(t.bookings) %>% na.omit()
 
 ## Booking list file
 cat("\nCreating booking list file...\n\n")
 
-t.bookingFile <- paste0(t.outputDir, "\\", Sys.Date(), " Booking File.txt")
+t.bookingFile <- paste0(t.outputDir, "\\", Sys.Date(), " Booking File.csv")
 
 if (file.exists(t.bookingFile)) {
     cat("** WARNING: Existing file will be overwritten.\n\n")
     file.remove(t.bookingFile)
 }
 
-writeLines(paste0(t.bookings$Region), con = t.bookingFile)
+write.table(t.bookings, sep = ",",row.names = FALSE, file = t.bookingFile)
+
+## VISA
+# Executable found at C:\Program Files\Australia Post\VisaTLMS\VisaCommand.exe - Environment variable added on Violet's computer.
+
+t.visaCommand <- function(sw, arg) {
+    t.command <- paste0("VisaCommand ", sw, " \"", arg, "\"")
+    t.result <- system(t.command, intern = TRUE)
+    t.result
+
+    ## ***TODO: May need to check log file for errors - see VISA user guide
+}
+
+t.visaCommand("/i", t.labelFile)
+t.visaCommand("/p", t.labelHeader)
+t.visaCommand("/d", t.labelHeader)
+

@@ -1,0 +1,74 @@
+---
+css: uld.css
+output: html_document
+---
+
+<table class = "page">
+
+<tbody>
+
+<tr>
+<td class = "smallpad">Lodge By:
+  <span class = "light"><br />(INCLUDE LOCATION)</span>
+</td>
+<td><h2>SALMAT MOOREBANK</h2></td>
+<td>Office of <br />Lodgement</td>
+<td><h2>SWLF</h2></td>
+</tr>
+
+<tr>
+  <td colspan = "4" class = "shaded"><h1>Unaddressed Mail Service</h1></td>
+</tr>
+
+<tr>
+  <td>LOGDEMENT DATE</td>
+  <td colspan = "3"> `r lodgementDate`</td>
+</tr>
+
+<tr>
+  <td>DELIVERY START DATE</td>
+  <td colspan = "3">`r startDate` TO `r endDate`</td>
+</tr>
+
+<tr>
+  <td>ULD IDENTIFIER</td>
+  <td colspan = "3">`r nUld` OF `r totalUld`</td>
+</tr>
+
+<tr>
+  <td class = "sorting">SORTING<br />DIVISIONS
+    <br /><br />
+    <span class = "light">
+      List ALL PSIs
+    </span>
+  </td>
+  <td colspan = "3"></td>
+</tr>
+
+<tr>
+  <td>BOOKING ADVICE CODE</td>
+  <td colspan = "3">`r booking`</td>
+</tr>
+
+<tr>
+  <td>DESTINATION
+    <span class = "light">
+      <br />All del centre or Mail Centre<br />
+      (BRICK STACK)
+    </span>
+  </td>
+  <td colspan = "3"></td>
+</tr>
+
+<tr>
+  <td>GROSS ULD<br />WEIGHT:</td>
+  <td colspan = "3">KG</td>
+</tr>
+
+</tbody>
+</table>
+
+<br />
+<h1>TRAYS = `r trays`</h1>
+<br />
+<br />
