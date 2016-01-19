@@ -1,5 +1,4 @@
-
-## Process tray label file
+## Process single tray label file
 t.processTrayLabelFile <- function(t.dir, t.inputDir, t.outputDir, t.file) {
     # Read file
     t.data <- readLines(paste0(t.inputDir, "\\", t.file), warn = FALSE)
@@ -83,5 +82,34 @@ t.processTrayLabelFile <- function(t.dir, t.inputDir, t.outputDir, t.file) {
     close(con)
 
     t.newdata <- c(t.data[1:(t.start + 1)], t.newcsv, t.data[t.end])
-    writeLines(t.newdata, con = paste0(t.outputDir, "\\", gsub("TrayLabelLPF.lpf$", "", t.file), gsub(" ", "_", t.dir), ".lpf"))
+    trayLabelFile <- paste0(t.outputDir, "\\", gsub("TrayLabelLPF.lpf$", "", t.file), gsub(" ", "_", t.dir), ".lpf")
+    writeLines(t.newdata, con = trayLabelFile)
+
+    c(trayLabelFile, t.bookings$Booking[t.bookings$Region == t.dir])
+}
+
+## Process tray label files
+t.processTrayLabelFiles <- function() {
+    cat("Processing tray label files...\n")
+
+    sapply(t.bookings$dir, function(bookingDir) {
+        t.dirPath <- file.path(t.inputDir, t.dir)
+        trayLabelFiles <- list.files(path = t.dirPath, recursive = FALSE, pattern = "*TrayLabelLPF.lpf", full.names = FALSE)
+
+        if (length(trayLabelFiles) == 0) {
+            cat(paste0("\n** WARNING: There is no tray label file in directory ", t.dir))
+            readline("Press <Enter> to Continue...")
+            return()
+        }
+
+        if (length(trayLabelFiles) > 1) {
+            cat(paste0("\n** WARNING: Multiple tray label files exist in directory ", t.dir))
+            cat("No tray labels for this directory will be processed.")
+            readline("Press <Enter> to Continue...")
+            return()
+        }
+
+        outputTrayLabelFile <- t.processTrayLabelFile(t.dir, t.dirPath, t.outputDir, trayLabelFiles[1])
+        outputTrayLabelFiles <<- rbind(outputTrayLabelFiles, outputTrayLabelFile)
+    })
 }

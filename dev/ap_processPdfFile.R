@@ -33,10 +33,7 @@ t.processPdfFile <- function(bookings) {
     sapply(t.dirs, function(t.dir) {
         t.dirPath <- file.path(t.inputDir, t.dir)
 
-        uldFiles <- list.files(path = tempDir,
-                               recursive = FALSE,
-                               pattern = "*.pdf",
-                               full.names = TRUE)
+        uldFile <- file.path(tempDir, paste0(bookings$Booking[bookings$Region == t.dir], ".pdf"))
 
         bookingConfirmationFiles <- list.files(path = t.dirPath,
                                                recursive = FALSE,
@@ -78,6 +75,8 @@ t.processPdfFile <- function(bookings) {
             readline("Press <Enter> to Continue...")
         }
 
+        pdfOutputFiles <<- c(pdfOutputFiles, )
+
         if (validBookingConfirmation) {
             pdfOutputFiles <<- c(pdfOutputFiles, bookingConfirmationFiles[1])
         }
@@ -86,7 +85,6 @@ t.processPdfFile <- function(bookings) {
             pdfOutputFiles <<- c(pdfOutputFiles, mailingStatementFiles[1])
         }
     })
-
 
     t.mergePdfFiles(pdfOutputFiles)
 
@@ -112,10 +110,10 @@ t.mergePdfFiles <- function(pdfOutputFiles) {
 
     t.result <- system(t.mergeCommand, intern = TRUE)
 
-    # if (length(t.result) != 0) {
-    #     cat(paste(t.result, collapse = "\n"))
-    #     readline("Press <Enter> to Continue...")
-    # }
+    if (length(t.result) != 0) {
+        cat(paste(t.result, collapse = "\n"))
+        readline("Press <Enter> to Continue...")
+    }
 
     cat("\n")
 }
