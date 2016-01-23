@@ -1,119 +1,76 @@
 ## Generate ULD pdf
 t.generateUldPdf <- function(uldRmdFile, uldCssFile, lodgementDate, startDate, endDate, nUld, totalUld, booking, trays, output) {
-    uldHtmlFile <- tempfile("uld", fileext = ".html")
-
+    uldHtmlFile <- paste0(t.tempDir, "/", booking, ".html")
     output <- paste0("\"", output, "\"")
 
     options(markdown.HTML.stylesheet = uldCssFile)
-    knit2html(input = uldRmdFile, output = uldHtmlFile)
+    result <- knit2html(input = uldRmdFile, output = uldHtmlFile, quiet = TRUE)
 
-    t.result <- system(paste0("\"C:\\Program Files (x86)\\wkhtmltopdf\\bin\\wkhtmltopdf\" ", uldHtmlFile, " ", output))
-    unlink(uldHtmlFile)
+    convertToPdfCommand <- paste0("\"C:\\Program Files (x86)\\wkhtmltopdf\\bin\\wkhtmltopdf\" -q ", uldHtmlFile, " ", output)
+    result <- system(convertToPdfCommand, invisible = TRUE, ignore.stdout = TRUE)
+
+    # unlink(uldHtmlFile)
+    result
 }
 
 ## Process PDF files
-t.processPdfFile <- function(bookings) {
-    pdfOutputFiles <- NULL
-
-    tempDir <- tempdir()
+t.processPdfFiles <- function(bookings) {
+    cat("\nProcessing pdf files...\n")
 
     sapply(1:nrow(bookings), function(n) {
-        t.generateUldPdf(uldRmdFile = t.uldRmdFile,
+        if (is.na(bookings$booking[n])) {
+            return()
+        }
+
+        uldFile <- file.path(t.tempDir, paste0(bookings$booking[n], ".pdf"))
+
+        result <- t.generateUldPdf(uldRmdFile = t.uldRmdFile,
                          uldCssFile = t.uldCssFile,
                          lodgementDate = as.Date("02/12/2015"),
                          startDate = as.Date("02/12/2015"),
                          endDate = as.Date("02/12/2015"),
                          nUld = 1,
                          totalUld = 1,
-                         booking = bookings$Booking[n],
+                         booking = bookings$booking[n],
                          trays = 44,
-                         output = file.path(tempDir, paste0(bookings$Booking[n], ".pdf")))
+                         output = uldFile)
+
+        bookings$uldFile[n] <<- uldFile
     })
 
-    sapply(t.dirs, function(t.dir) {
-        t.dirPath <- file.path(t.inputDir, t.dir)
+    pdfOutputFiles <- NULL
 
-        uldFile <- file.path(tempDir, paste0(bookings$Booking[bookings$Region == t.dir], ".pdf"))
-
-        bookingConfirmationFiles <- list.files(path = t.dirPath,
-                                               recursive = FALSE,
-                                               pattern = "*BookingConfirmationAdvice.pdf",
-                                               full.names = TRUE)
-
-        mailingStatementFiles <- list.files(path = t.dirPath,
-                                            recursive = FALSE,
-                                            pattern = "*MailingStatement.pdf",
-                                            full.names = TRUE)
-
-        ## File validation
-        validBookingConfirmation <- TRUE
-        validMailingStatement <- TRUE
-
-        if (length(bookingConfirmationFiles) == 0) {
-            validBookingConfirmation <- FALSE
-            cat(paste0("** WARNING: There is no booking confirmation advice file in directory ", t.dir))
-            readline("Press <Enter> to Continue...")
+    sapply(1:nrow(bookings), function(n) {
+        if (!is.na(bookings$uldFile[n])) {
+            pdfOutputFiles <<- c(pdfOutputFiles, bookings$uldFile[n])
         }
 
-        if (length(bookingConfirmationFiles) > 1) {
-            validBookingConfirmation <- FALSE
-            cat(paste0("** WARNING: Multiple booking confirmation advice files exist in directory ", t.dir))
-            cat("No booking confirmation advice for this directory will be processed.")
-            readline("Press <Enter> to Continue...")
+        if (!is.na(bookings$bookingConfirmationFile[n])) {
+            pdfOutputFiles <<- c(pdfOutputFiles, bookings$bookingConfirmationFile[n])
         }
 
-        if (length(mailingStatementFiles) == 0) {
-            validMailingStatement = FALSE
-            cat(paste0("** WARNING: There is no mailing statement file in directory ", t.dir))
-            readline("Press <Enter> to Continue...")
-        }
-
-        if (length(mailingStatementFiles) > 1) {
-            validMailingStatement = FALSE
-            cat(paste0("** WARNING: Multiple mailing statement advice files exist in directory ", t.dir))
-            cat("No mailing statement for this directory will be printed.")
-            readline("Press <Enter> to Continue...")
-        }
-
-        pdfOutputFiles <<- c(pdfOutputFiles, )
-
-        if (validBookingConfirmation) {
-            pdfOutputFiles <<- c(pdfOutputFiles, bookingConfirmationFiles[1])
-        }
-
-        if (validMailingStatement) {
-            pdfOutputFiles <<- c(pdfOutputFiles, mailingStatementFiles[1])
+        if (!is.na(bookings$mailingStatementFile[n])) {
+            pdfOutputFiles <<- c(pdfOutputFiles, bookings$mailingStatementFile[n])
         }
     })
 
     t.mergePdfFiles(pdfOutputFiles)
 
-    unlink(tempDir)
+    bookings
 }
 
 ## Merge PDF files
 t.mergePdfFiles <- function(pdfOutputFiles) {
     cat("\nMerging pdf files...\n\n")
-    pdfOutputFiles <- paste0("\"", t.pdfOutputFiles, "\"")
-    pdfOutputFile <- paste0(t.outputDir, "\\", Sys.Date(), " Telstra Aust Post.pdf")
+    pdfOutputFiles <- paste0("\"", pdfOutputFiles, "\"")
 
-    if (file.exists(t.pdfOutputFile)) {
-        cat("** WARNING: Existing file will be overwritten.\n\n")
-        file.remove(t.pdfOutputFile)
-    }
+    pdfOutputFile <- paste0(t.outputDir, "/", Sys.Date(), " Telstra Aust Post.pdf")
+    pdfOutputFile <- paste0("\"", pdfOutputFile, "\"")
 
-    t.pdfOutputFile <- paste0("\"", t.pdfOutputFile, "\"")
-    t.mergeCommand <- paste(t.pdftkApp,
-                            paste(t.pdfOutputFiles, collapse = " "),
+    mergeCommand <- paste("pdftk ",
+                            paste(pdfOutputFiles, collapse = " "),
                             "cat output",
-                            t.pdfOutputFile)
+                            pdfOutputFile)
 
-    t.result <- system(t.mergeCommand, intern = TRUE)
-
-    if (length(t.result) != 0) {
-        cat(paste(t.result, collapse = "\n"))
-        readline("Press <Enter> to Continue...")
-    }
-
-    cat("\n")
+    result <- system(mergeCommand, intern = TRUE)
 }
