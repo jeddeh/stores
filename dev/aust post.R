@@ -74,7 +74,7 @@ t.brickStack <- FALSE
 cat("\014")
 cat("This application processes bulk Telstra Aust Post bookings.\n\n")
 
-cat("Select input folder\n")
+cat("Select the input folder. This is the zip folder downloaded from the Aust Post booking email.\n")
 
 t.check = FALSE
 while (t.check == FALSE) {
@@ -83,8 +83,10 @@ while (t.check == FALSE) {
         '1' = "T:/Warehouse/Store Copies/Rob/dev",
         '2' = "C:/Users/Rob/Desktop/Stores/dev/data/Telstra Aust Post.zip")
 
-    t.inputZip <- choose.files(default = defaultDir, caption = "Select Aust Post folder",
-                               multi = FALSE, filters = Filters[c("zip", "All"),])
+#     t.inputZip <- choose.files(default = defaultDir, caption = "Select Aust Post folder",
+#                                multi = FALSE, filters = Filters[c("zip", "All"),])
+
+    t.inputZip <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Aust Post.zip"
 
     if (length(t.inputZip) == 0) {
         stop()
@@ -112,7 +114,7 @@ t.bookings$dir <- list.dirs(path=t.inputDir, recursive = FALSE, full.names = TRU
 t.bookings$region <- list.dirs(path=t.inputDir, recursive = FALSE, full.names = FALSE)
 
 t.check <- FALSE
-cat("Select output folder\n")
+cat("Select the output folder. This is an empty folder you need to create where the output pdf and tray label files are to be saved.\n")
 
 while(t.check == FALSE) {
     defaultDir <- switch(t.pc,
@@ -121,10 +123,11 @@ while(t.check == FALSE) {
         '2' = "C:/Users/Desktop/Stores/dev/data/Telstra Output Files/"
     )
 
-    t.outputDir <- choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/data/Telstra Output Files/", caption = "Select output folder")
+    # t.outputDir <- choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/data/Telstra Output Files/", caption = "Select output folder")
+    t.outputDir <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Output Files"
 
     if (is.na(t.outputDir)) {
-        stop()
+        stop
     }
 
     if (length(list.files(t.outputDir, all.files = TRUE, include.dirs = TRUE, no.. = TRUE)) != 0) {
@@ -137,7 +140,8 @@ while(t.check == FALSE) {
 
 t.check <- FALSE
 while(t.check == FALSE) {
-    t.weight <- as.numeric(readline("Enter weight per catalogue (g): "))
+    # t.weight <- as.numeric(readline("Enter weight per catalogue (g): "))
+    t.weight <- 5
 
     if (!is.na(t.weight) && t.weight > 0) {
         t.check <- TRUE
@@ -146,7 +150,8 @@ while(t.check == FALSE) {
 
 t.check <- FALSE
 while(t.check == FALSE) {
-    t.bundleSize <- as.integer(t.bundleSize <- readline("Enter bundle size: "))
+    # t.bundleSize <- as.integer(t.bundleSize <- readline("Enter bundle size: "))
+    t.bundleSize <- 5
 
     if (!is.na(t.bundleSize) && t.bundleSize > 0) {
         t.check <- TRUE
@@ -161,7 +166,8 @@ t.maxWeightPerTray <- t.maxBundlesPerTray * t.bundleSize * t.weight
 
 t.check <- FALSE
 while(t.check == FALSE) {
-    maxBundles <- as.integer(readline(paste0("Enter maximum bundles per tray (max ", t.maxBundlesPerTray, "): ")))
+    # maxBundles <- as.integer(readline(paste0("Enter maximum bundles per tray (max ", t.maxBundlesPerTray, "): ")))
+    maxBundles <- 5
 
     if (!is.na(maxBundles) && maxBundles > 0 && maxBundles <= t.maxBundlesPerTray) {
         t.check <- TRUE
@@ -181,7 +187,7 @@ t.bookings <- t.processTrayLabelFiles(t.bookings)
 t.bookings <- t.processPdfFiles(t.bookings)
 
 ## Booking list file
-cat("\nCreating booking list file...\n\n")
+cat("Creating booking list file...\n")
 t.bookingFile <- paste0(t.outputDir, "/", Sys.Date(), " Booking File.csv")
 
 write.table(dplyr::select(t.bookings, region, booking, items, bundles, trays, brick),
@@ -214,7 +220,7 @@ sapply(1:nrow(t.bookings), function(n) {
         return()
     }
 
-    readline(paste("\nPress <ENTER> to print label file for", t.bookings$region[n]))
+    readline(paste("Press <ENTER> to print label file for", t.bookings$region[n]))
 
     t.visaCommand("/i", t.bookings$dir[n])
     t.visaCommand("/p", t.bookings$booking[n])

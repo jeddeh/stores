@@ -8,60 +8,93 @@ output: html_document
 <tbody>
 
 <tr>
-<td class = "smallpad">Lodge By:
-  <span class = "light"><br />(INCLUDE LOCATION)</span>
-</td>
-<td><h2>SALMAT MOOREBANK</h2></td>
-<td>Office of <br />Lodgement</td>
-<td><h2>SWLF</h2></td>
+  <td class = "smallpad">
+  <div class = "r">
+    Lodge By:
+    <span class = "light"><br />(INCLUDE LOCATION)</span>
+  </div>
+  </td>
+  <td><h2>SALMAT MOOREBANK</h2></td>
+  <td>Office of <br />Lodgement</td>
+  <td><h2>SWLF</h2></td>
 </tr>
 
 <tr>
-  <td colspan = "4" class = "shaded"><h1>Unaddressed Mail Service</h1></td>
+  <td colspan = "4" class = "shaded">
+  <div class = "r">
+    <h1>Unaddressed Mail Service</h1>
+  </div>
+  </td>
 </tr>
 
 <tr>
-  <td>LOGDEMENT DATE</td>
+  <td>
+  <div class = "r">
+    LOGDEMENT DATE
+  </div
+  </td>
   <td colspan = "3"> `r lodgementDate`</td>
 </tr>
 
 <tr>
-  <td>DELIVERY START DATE</td>
+  <td> 
+  <div class = "r">
+    DELIVERY START DATE
+  <div />
+  </td>
   <td colspan = "3">`r startDate` TO `r endDate`</td>
 </tr>
 
 <tr>
-  <td>ULD IDENTIFIER</td>
+  <td>
+  <div class = "r">
+    ULD IDENTIFIER
+  </div>
+  </td>
   <td colspan = "3">`r nUld` OF `r totalUld`</td>
 </tr>
 
 <tr>
-  <td class = "sorting">SORTING<br />DIVISIONS
+  <td class = "sorting">
+  <div class = "r">
+    SORTING<br />DIVISIONS
     <br /><br />
     <span class = "light">
       List ALL PSIs
     </span>
+  </div>
   </td>
   <td colspan = "3"></td>
 </tr>
 
 <tr>
-  <td>BOOKING ADVICE CODE</td>
+  <td>
+  <div class = "r">
+    BOOKING ADVICE CODE
+  </div>
+  </td>
   <td colspan = "3">`r booking`</td>
 </tr>
 
 <tr>
-  <td>DESTINATION
+  <td>
+  <div class = "r">
+    DESTINATION
     <span class = "light">
       <br />All del centre or Mail Centre<br />
       (BRICK STACK)
     </span>
+  </div>
   </td>
   <td colspan = "3"></td>
 </tr>
 
 <tr>
-  <td>GROSS ULD<br />WEIGHT:</td>
+  <td>
+  <div class = "r">
+    GROSS ULD<br />WEIGHT:
+  </div>
+  </td>
   <td colspan = "3">KG</td>
 </tr>
 

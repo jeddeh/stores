@@ -78,7 +78,7 @@ t.processTrayLabelFiles <- function(bookings) {
             }
         }))
 
-        bookings$trays[n] <- pt.ntrays
+        bookings$trays[n] <<- pt.ntrays
         pt.newframe <- arrange(pt.newframe, desc(Tray_Qty), Sort_Plan)
 
         invisible(sapply(1:nrow(pt.newframe), FUN = function(n) {
@@ -95,7 +95,7 @@ t.processTrayLabelFiles <- function(bookings) {
         trayLabelFile <- paste0(t.outputDir, "/", bookings$booking[n], "_", bookings$region[n], ".lpf")
         writeLines(pt.newdata, con = trayLabelFile)
 
-        bookings$trayLabelOutputFile[n] <- trayLabelFile
+        bookings$trayLabelOutputFile[n] <<- trayLabelFile
     })
 
     bookings
