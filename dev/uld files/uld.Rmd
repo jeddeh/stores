@@ -3,99 +3,101 @@ css: uld.css
 output: html_document
 ---
 
+<br />
+<br />
+<br />
+
 <table class = "page">
 
 <tbody>
 
 <tr>
-  <td class = "smallpad">
+ <td class = "smallpad">
   <div class = "r">
-    Lodge By:
-    <span class = "light"><br />(INCLUDE LOCATION)</span>
-  </div>
-  </td>
-  <td><h2>SALMAT MOOREBANK</h2></td>
-  <td>Office of <br />Lodgement</td>
-  <td><h2>SWLF</h2></td>
+  Lodge By:
+  <span class = "light"><br />(INCLUDE LOCATION)</span>
+ </div>
+ </td>
+ <td><h2>SALMAT MOOREBANK</h2></td>
+ <td>Office of <br />Lodgement</td>
+ <td><h2>SWLF</h2></td>
 </tr>
 
 <tr>
-  <td colspan = "4" class = "shaded">
-  <div class = "r">
-    <h1>Unaddressed Mail Service</h1>
-  </div>
-  </td>
+ <td colspan = "4" class = "shaded centretd">
+  <h1>Unaddressed Mail Service</h1>
+ </td>
 </tr>
 
 <tr>
-  <td>
-  <div class = "r">
-    LOGDEMENT DATE
-  </div
-  </td>
-  <td colspan = "3"> `r lodgementDate`</td>
+ <td>
+ <div class = "r">
+  LOGDEMENT DATE
+ </div>
+ </td>
+ <td class = "content" colspan = "3"> `r lodgementDate`</td>
 </tr>
 
 <tr>
-  <td> 
-  <div class = "r">
-    DELIVERY START DATE
-  <div />
-  </td>
-  <td colspan = "3">`r startDate` TO `r endDate`</td>
+ <td> 
+ <div class = "r">
+  DELIVERY START DATE
+ <div />
+ </td>
+ <td class = "content" colspan = "3">`r startDate` TO `r endDate`</td>
 </tr>
 
 <tr>
-  <td>
-  <div class = "r">
-    ULD IDENTIFIER
-  </div>
-  </td>
-  <td colspan = "3">`r nUld` OF `r totalUld`</td>
+ <td>
+ <div class = "r">
+  ULD IDENTIFIER
+ </div>
+ </td>
+ <td class = "content" colspan = "3">`r nUld` OF `r totalUld`</td>
 </tr>
 
 <tr>
-  <td class = "sorting">
-  <div class = "r">
-    SORTING<br />DIVISIONS
-    <br /><br />
-    <span class = "light">
-      List ALL PSIs
-    </span>
-  </div>
-  </td>
-  <td colspan = "3"></td>
+ <td class = "sorting">
+ <div class = "r">
+  SORTING<br />DIVISIONS
+  <br /><br />
+  <span class = "light">
+   List ALL PSIs
+  </span>
+ </div>
+ </td>
+ <td class = "content" colspan = "3"></td>
 </tr>
 
 <tr>
-  <td>
-  <div class = "r">
-    BOOKING ADVICE CODE
-  </div>
-  </td>
-  <td colspan = "3">`r booking`</td>
+ <td>
+ <div class = "r">
+  BOOKING ADVICE CODE
+ </div>
+ </td>
+ <td class = "content" colspan = "3"><span class = "highlight">`r booking`</span></td>
 </tr>
 
 <tr>
-  <td>
-  <div class = "r">
-    DESTINATION
-    <span class = "light">
-      <br />All del centre or Mail Centre<br />
-      (BRICK STACK)
-    </span>
-  </div>
-  </td>
-  <td colspan = "3"></td>
+ <td>
+ <div class = "r">
+  DESTINATION
+  <span class = "light">
+   <br />All del centre or Mail Centre<br />
+   (BRICK STACK)
+  </span>
+ </div>
+ </td>
+ <td class = "content" colspan = "3"></td>
 </tr>
 
 <tr>
-  <td>
-  <div class = "r">
-    GROSS ULD<br />WEIGHT:
-  </div>
-  </td>
-  <td colspan = "3">KG</td>
+ <td>
+ <div class = "r">
+  GROSS ULD<br />WEIGHT:
+ </div>
+ </td>
+ <td class = "content" colspan = "3"></td>
 </tr>
 
 </tbody>

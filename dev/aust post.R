@@ -3,6 +3,7 @@
 library(dplyr)
 library(magrittr)
 library(knitr)
+library(lubridate)
 
 ## Dependencies
 # pdftk is an appplication with the ability to merge pdf files. It is accessed through system commands.
@@ -86,7 +87,7 @@ while (t.check == FALSE) {
 #     t.inputZip <- choose.files(default = defaultDir, caption = "Select Aust Post folder",
 #                                multi = FALSE, filters = Filters[c("zip", "All"),])
 
-    t.inputZip <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Aust Post.zip"
+    t.inputZip <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Aust Post.zip"; t.check = TRUE
 
     if (length(t.inputZip) == 0) {
         stop()
@@ -124,7 +125,7 @@ while(t.check == FALSE) {
     )
 
     # t.outputDir <- choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/data/Telstra Output Files/", caption = "Select output folder")
-    t.outputDir <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Output Files"
+    t.outputDir <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Output Files"; t.check = TRUE
 
     if (is.na(t.outputDir)) {
         stop
@@ -140,8 +141,7 @@ while(t.check == FALSE) {
 
 t.check <- FALSE
 while(t.check == FALSE) {
-    # t.weight <- as.numeric(readline("Enter weight per catalogue (g): "))
-    t.weight <- 5
+    t.weight <- as.numeric(readline("Enter weight per catalogue (g): "))
 
     if (!is.na(t.weight) && t.weight > 0) {
         t.check <- TRUE
@@ -150,11 +150,39 @@ while(t.check == FALSE) {
 
 t.check <- FALSE
 while(t.check == FALSE) {
-    # t.bundleSize <- as.integer(t.bundleSize <- readline("Enter bundle size: "))
-    t.bundleSize <- 5
+    t.bundleSize <- as.integer(t.bundleSize <- readline("Enter bundle size: "))
 
     if (!is.na(t.bundleSize) && t.bundleSize > 0) {
         t.check <- TRUE
+    }
+}
+
+cat("\nThe following dates can be found in the Booking Confirmation Advice PDFs.\n\n")
+
+t.check <- FALSE
+while(t.check == FALSE) {
+    t.lodgementDate <- readline("Enter the lodgement date (dd/mm/yy): ")
+        if (grepl("^[0-3][0-9]/[0-1][0-9]/[0-2][0-9]", t.lodgementDate) && !is.na(as.Date(dmy(t.lodgementDate)))) {
+            t.check <- TRUE
+            t.lodgementDate <- format(dmy(t.lodgementDate), "%d/%m/%Y")
+        }
+}
+
+t.check <- FALSE
+while(t.check == FALSE) {
+    t.startDate <- readline("Enter the delivery start date (dd/mm/yy): ")
+    if (grepl("^[0-3][0-9]/[0-1][0-9]/[0-2][0-9]", t.startDate) && !is.na(as.Date(dmy(t.startDate)))) {
+        t.check <- TRUE
+        t.startDate <- format(dmy(t.startDate), "%d/%m/%Y")
+    }
+}
+
+t.check <- FALSE
+while(t.check == FALSE) {
+    t.endDate <- readline("Enter the delivery end date (dd/mm/yy): ")
+    if (grepl("^[0-3][0-9]/[0-1][0-9]/[0-2][0-9]", t.endDate) && !is.na(as.Date(dmy(t.endDate)))) {
+        t.check <- TRUE
+        t.endDate <- format(dmy(t.endDate), "%d/%m/%Y")
     }
 }
 

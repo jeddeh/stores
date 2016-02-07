@@ -60,7 +60,12 @@ t.processTrayLabelFiles <- function(bookings) {
 
             fullTrays <- floor(quantity / t.maxTraySize)
             partialTrayQuantity <- quantity %% t.maxTraySize
-            pt.ntrays <<- pt.ntrays + fullTrays + (partialTrayQuantity / partialTrayQuantity)
+
+            if (partialTrayQuantity == 0) {
+                pt.ntrays <<- pt.ntrays + fullTrays
+            } else {
+                pt.ntrays <<- pt.ntrays + fullTrays + (partialTrayQuantity / partialTrayQuantity)
+            }
 
             fullTrayRow <- pt.combined[i, ]
             fullTrayRow$Tray_Qty <- t.maxTraySize

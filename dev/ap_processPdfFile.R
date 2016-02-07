@@ -4,7 +4,7 @@ t.generateUldPdf <- function(uldRmdFile, uldCssFile, lodgementDate, startDate, e
     output <- paste0("\"", output, "\"")
 
     options(markdown.HTML.stylesheet = uldCssFile)
-    result <- knit2html(input = uldRmdFile, output = uldHtmlFile, quiet = TRUE)
+    result <- rmarkdown::render(input = uldRmdFile, output_file = uldHtmlFile, clean = TRUE, quiet = TRUE)
 
     convertToPdfCommand <- paste0("\"C:\\Program Files (x86)\\wkhtmltopdf\\bin\\wkhtmltopdf\" -q ", uldHtmlFile, " ", output)
     result <- system(convertToPdfCommand, invisible = TRUE, ignore.stdout = TRUE)
@@ -26,13 +26,13 @@ t.processPdfFiles <- function(bookings) {
 
         result <- t.generateUldPdf(uldRmdFile = t.uldRmdFile,
                          uldCssFile = t.uldCssFile,
-                         lodgementDate = as.Date("02/12/2015"),
-                         startDate = as.Date("02/12/2015"),
-                         endDate = as.Date("02/12/2015"),
+                         lodgementDate = t.lodgementDate,
+                         startDate = t.startDate,
+                         endDate = t.endDate,
                          nUld = 1,
                          totalUld = 1,
                          booking = bookings$booking[n],
-                         trays = 44,
+                         trays = bookings$trays[n],
                          output = uldFile)
 
         bookings$uldFile[n] <<- uldFile
@@ -74,3 +74,29 @@ t.mergePdfFiles <- function(pdfOutputFiles) {
 
     result <- system(mergeCommand, intern = TRUE)
 }
+
+testPdf <- function() {
+    uldRmdFile <- "C:/Users/Rob/Desktop/Stores/dev/uld files/uld.Rmd"
+    uldCssFile <- "C:/Users/Rob/Desktop/Stores/dev/uld files/uld.css"
+    lodgementDate <- 4
+    startDate <- 3
+    endDate <- 2
+    nUld <- 1
+    totalUld <- 9
+    booking <- 8
+    trays <- 7
+    output <- 6
+    outputhtml <- "C:/Users/Rob/Desktop/THISFILE.html"
+    outputpdf <- "C:/Users/Rob/Desktop/THISFILE.pdf"
+
+    unlink(outputhtml)
+    unlink(outputpdf)
+
+    result <- rmarkdown::render(input = uldRmdFile, output_file = outputhtml, output_format = "html_document", clean = TRUE, quiet = TRUE)
+
+    convertToPdfCommand <- paste0("\"C:\\Program Files (x86)\\wkhtmltopdf\\bin\\wkhtmltopdf\" -q ", outputhtml, " ", outputpdf)
+    result <- system(convertToPdfCommand, invisible = TRUE, ignore.stdout = TRUE)
+
+    system(paste("open", outputpdf))
+
+    }
