@@ -1,0 +1,81 @@
+---
+css: pack.css
+output: html_document
+---
+
+<br />
+<br />
+<br />
+
+<table class = "page">
+
+<tbody>
+
+<tr>
+ <td colspan = "4" class = "shaded centretd">
+  <h1>Telstra Packing Sheet</h1>
+ </td>
+</tr>
+
+<tr>
+ <td>
+ <div class = "r">
+  STOCK MOVEMENT
+ </div>
+ </td>
+ <td class = "content" > `r`</td>
+</tr>
+
+<tr>
+ <td>
+ <div class = "r">
+  OVERPRINT
+ </div>
+ </td>
+ <td class = "content" > `r`</td>
+</tr>
+
+<tr>
+ <td>
+ <div class = "r">
+  BUNDLE SIZE
+ </div>
+ </td>
+ <td class = "content" > `r`</td>
+</tr>
+
+<tr>
+ <td>
+ <div class = "r">
+  LODGEMENT DATE
+ </div>
+ </td>
+ <td class = "content" > `r`</td>
+</tr>
+
+<tr>
+ <td>
+ <div class = "r">
+  DISTRIBUTION DATES
+ </div>
+ </td>
+ <td class = "content" > `r`</td>
+</tr>
+
+<tr>
+ <td> 
+ <div class = "r">
+  ULD
+ <div />
+ </td>
+ <td class = "content" >`r` TO `r`</td>
+</tr>
+
+<tr>
+ <td>
+ <div class = "r">
+  TRAYS
+ </div>
+ </td>
+ <td class = "content" >`r` OF `r`</td>
+</tr>
