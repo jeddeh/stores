@@ -1,6 +1,6 @@
 ## Generate ULD pdf
 t.generateUldPdf <- function(uldRmdFile, uldCssFile, lodgementDate, startDate, endDate, nUld, totalUld, booking, trays, output) {
-    uldHtmlFile <- paste0(t.tempDir, "/", booking, ".html")
+    uldHtmlFile <- paste0(t.processDir, "/", booking, ".html")
     output <- paste0("\"", output, "\"")
 
     options(markdown.HTML.stylesheet = uldCssFile)
@@ -22,7 +22,7 @@ t.processPdfFiles <- function(bookings) {
             return()
         }
 
-        uldFile <- file.path(t.tempDir, paste0(bookings$booking[n], ".pdf"))
+        uldFile <- file.path(t.processDir, paste0(bookings$booking[n], ".pdf"))
 
         result <- t.generateUldPdf(uldRmdFile = t.uldRmdFile,
                          uldCssFile = t.uldCssFile,
@@ -75,6 +75,7 @@ t.mergePdfFiles <- function(pdfOutputFiles) {
     result <- system(mergeCommand, intern = TRUE)
 }
 
+## Debug only
 testPdf <- function() {
     uldRmdFile <- "C:/Users/Rob/Desktop/Stores/dev/uld files/uld.Rmd"
     uldCssFile <- "C:/Users/Rob/Desktop/Stores/dev/uld files/uld.css"

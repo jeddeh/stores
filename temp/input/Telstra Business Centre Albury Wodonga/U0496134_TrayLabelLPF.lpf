@@ -1,0 +1,21 @@
+#Australia Post Visa Tray Label System - Ver:
+3v1-850
+#Label Plan File
+
+#Label Plan Header
+Unaddressed Mail_U0496134,Salmat (NSW),0287632128,ACT,U0496134,1
+
+#Label Details
+#Service,Sort_Plan_Type,Sort_Plan,Destination_Ind,Mail_Size,Label_Qty,Date,Additional_Text
+U,3,2641,1,L,2,18-JAN-16,T1/11 A114
+U,3,2640,0,L,2,18-JAN-16,T2/11 A200
+U,3,2640,0,L,2,18-JAN-16,T3/11 A85
+U,3,2641,0,L,2,18-JAN-16,T4/11 A200
+U,3,2641,0,L,2,18-JAN-16,T5/11 A200
+U,3,2641,0,L,2,18-JAN-16,T6/11 A200
+U,3,2641,0,L,2,18-JAN-16,T7/11 A200
+U,3,2641,0,L,2,18-JAN-16,T8/11 A200
+U,3,2641,0,L,2,18-JAN-16,T9/11 A200
+U,3,2641,0,L,2,18-JAN-16,T10/11 A159
+U,3,2640,1,L,2,18-JAN-16,T11/11 A41
+#End Of File

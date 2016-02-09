@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns6:MailingStatement xmlns:ns2="http://www.auspost.com.au/Schema/ProductAndServiceFulfilment/MailroomServices:v5" xmlns:ns3="http://www.auspost.com.au/Schema/CommonDataElements/Location/Address:v1" xmlns:ns4="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns5="http://www.auspost.com.au/Schema/CommonDataElements/CommonTypes:v1" xmlns:ns6="http://www.auspost.com.au/elms/soap">
+    <ns6:LodgementDetails>
+        <ns6:WorkCentreCode>270051</ns6:WorkCentreCode>
+    </ns6:LodgementDetails>
+    <ns6:OriginatorDetails>
+        <ns6:AccountNumber>6897996</ns6:AccountNumber>
+    </ns6:OriginatorDetails>
+    <ns6:JobDetails>
+        <ns6:UniqueID>U0496209</ns6:UniqueID>
+        <ns6:InvoiceReference>U0496209</ns6:InvoiceReference>
+    </ns6:JobDetails>
+    <ns6:Products>
+        <ns6:Product>
+            <ns6:ProductCode>U16</ns6:ProductCode>
+            <ns6:ContractCode>0003270775</ns6:ContractCode>
+            <ns6:PriceFactors>
+                <ns6:PriceFactor>
+                    <ns6:PriceFactorKey>UMSNBR</ns6:PriceFactorKey>
+                    <ns6:PriceFactorValue>U0496209</ns6:PriceFactorValue>
+                </ns6:PriceFactor>
+                <ns6:PriceFactor>
+                    <ns6:PriceFactorKey>WC027D</ns6:PriceFactorKey>
+                    <ns6:PriceFactorValue>0.0300</ns6:PriceFactorValue>
+                </ns6:PriceFactor>
+                <ns6:PriceFactor>
+                    <ns6:PriceFactorKey>ST002D</ns6:PriceFactorKey>
+                    <ns6:PriceFactorValue>R</ns6:PriceFactorValue>
+                </ns6:PriceFactor>
+                <ns6:PriceFactor>
+                    <ns6:PriceFactorKey>DZ008D</ns6:PriceFactorKey>
+                    <ns6:PriceFactorValue>S</ns6:PriceFactorValue>
+                </ns6:PriceFactor>
+                <ns6:PriceFactor>
+                    <ns6:PriceFactorKey>SZ001</ns6:PriceFactorKey>
+                    <ns6:PriceFactorValue>L</ns6:PriceFactorValue>
+                </ns6:PriceFactor>
+            </ns6:PriceFactors>
+            <ns6:ProductQuantity>894</ns6:ProductQuantity>
+        </ns6:Product>
+    </ns6:Products>
+</ns6:MailingStatement>

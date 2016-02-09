@@ -13,29 +13,10 @@ library(lubridate)
 ## Setting up
 rm(list = ls())
 
-# setwd(dirname(sys.frame(1)$ofile))
-setwd("C:/Users/Rob/Desktop/Stores/dev")
-
-# PC: '0' - Violet's PC, '1' - Receiving PC, '2' - Home PC
-t.pc <- '2'
-
+source("ap_configuration.R")
 source("ap_validateBookingFiles.R")
 source("ap_processTrayLabelFile.R")
 source("ap_processPdfFile.R")
-
-t.baseDir <- "~/AustPost"
-
-closeAllConnections()
-unlink(t.baseDir, recursive = TRUE, force = TRUE)
-dir.create(t.baseDir)
-
-setwd(t.baseDir)
-t.baseDir <- getwd()
-
-t.tempDir <- file.path(t.baseDir, "temp")
-dir.create(t.tempDir)
-t.inputDir <- file.path(t.baseDir, "input")
-dir.create(t.inputDir)
 
 ## Declarations
 t.bookings <- data.frame(dir = character(),
@@ -55,19 +36,6 @@ t.bookings <- data.frame(dir = character(),
 t.bookingsColNames <- c("dir", "region", "booking", "items", "bundles", "trays", "brick", "bookingConfirmationFile",
                         "mailingStatementFile", "uldFile", "trayLabelFile", "trayLabelOutputFile")
 
-# ULD files are used to generate ULD tags.
-t.uldRmdFile <- switch(t.pc,
-    '0' = ,
-    '1' = ,
-    '2' = "C:/Users/Rob/Desktop/Stores/dev/uld files/uld.Rmd"
-)
-
-t.uldCssFile <- switch(t.pc,
-   '0' = ,
-   '1' = ,
-   '2' = "C:/Users/Rob/Desktop/Stores/dev/uld files/uld.css"
-)
-
 t.tray <- data.frame(type = c("Large", "Small"), maxweight = c(16 * 1000, 8 * 1000))
 t.brickStack <- FALSE
 
@@ -79,15 +47,8 @@ cat("Select the input folder. This is the zip folder downloaded from the Aust Po
 
 t.check = FALSE
 while (t.check == FALSE) {
-    defaultDir <- switch (t.pc,
-        '0' = "C:/Users/saadv/Desktop",
-        '1' = "T:/Warehouse/Store Copies/Rob/dev",
-        '2' = "C:/Users/Rob/Desktop/Stores/dev/data/Telstra Aust Post.zip")
-
-#     t.inputZip <- choose.files(default = defaultDir, caption = "Select Aust Post folder",
-#                                multi = FALSE, filters = Filters[c("zip", "All"),])
-
-    t.inputZip <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Aust Post.zip"; t.check = TRUE
+    t.inputZip <- choose.files(default = t.defaultInputDir, caption = "Select Aust Post folder",
+                               multi = FALSE, filters = Filters[c("zip", "All"),])
 
     if (length(t.inputZip) == 0) {
         stop()
@@ -118,17 +79,10 @@ t.check <- FALSE
 cat("Select the output folder. This is an empty folder you need to create where the output pdf and tray label files are to be saved.\n")
 
 while(t.check == FALSE) {
-    defaultDir <- switch(t.pc,
-        '0' = "C:/Users/saadv/Desktop/",
-        '1' = "T:/Warehouse/Store Copies/Rob/dev/",
-        '2' = "C:/Users/Desktop/Stores/dev/data/Telstra Output Files/"
-    )
-
-    # t.outputDir <- choose.dir(default = "C:/Users/Rob/Desktop/Stores/dev/data/Telstra Output Files/", caption = "Select output folder")
-    t.outputDir <- "C:\\Users\\Rob\\Desktop\\Stores\\dev\\data\\Telstra Output Files"; t.check = TRUE
+    t.outputDir <- choose.dir(default = t.defaultOutputDir, caption = "Select output folder")
 
     if (is.na(t.outputDir)) {
-        stop
+        stop()
     }
 
     if (length(list.files(t.outputDir, all.files = TRUE, include.dirs = TRUE, no.. = TRUE)) != 0) {
@@ -194,8 +148,7 @@ t.maxWeightPerTray <- t.maxBundlesPerTray * t.bundleSize * t.weight
 
 t.check <- FALSE
 while(t.check == FALSE) {
-    # maxBundles <- as.integer(readline(paste0("Enter maximum bundles per tray (max ", t.maxBundlesPerTray, "): ")))
-    maxBundles <- 5
+    maxBundles <- as.integer(readline(paste0("Enter maximum bundles per tray (max ", t.maxBundlesPerTray, "): ")))
 
     if (!is.na(maxBundles) && maxBundles > 0 && maxBundles <= t.maxBundlesPerTray) {
         t.check <- TRUE
@@ -229,18 +182,18 @@ write.table(dplyr::select(t.bookings, region, booking, items, bundles, trays, br
 
 cat("\nPrinting labels...")
 
-# t.visaCommand <- function(sw, arg) {
-#     t.command <- paste0("VisaCommand ", sw, " \"", arg, "\"")
-#     t.result <- system(t.command, intern = TRUE)
-#     t.result
-#
-#     # Log file created - see VISA user guide for details
-# }
+t.visaCommand <- function(sw, arg) {
+    t.command <- paste0("VisaCommand ", sw, " \"", arg, "\"")
+    t.result <- system(t.command, intern = TRUE)
+    t.result
+
+    # Log file created - see VISA user guide for details
+}
 
 ## Debug
-t.visaCommand <- function(sw, arg) {
-    cat(arg)
-}
+# t.visaCommand <- function(sw, arg) {
+#     cat(arg)
+# }
 ## End debug
 
 sapply(1:nrow(t.bookings), function(n) {
